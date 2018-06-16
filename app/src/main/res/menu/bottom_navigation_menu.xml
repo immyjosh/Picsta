@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_news"
+        android:title="News"
+        android:icon="@drawable/ic_event_note_black_24dp"/>
+
+    <item
+        android:id="@+id/action_explore"
+        android:title="Explore"
+        android:icon="@drawable/ic_explore_black_24dp"/>
+
+    <item
+        android:id="@+id/action_upload"
+        android:title="Upload"
+        android:icon="@drawable/ic_cloud_upload_black_24dp"/>
+</menu>

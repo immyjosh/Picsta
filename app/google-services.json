@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "746149705614",
+    "firebase_url": "https://picsta-fa6e2.firebaseio.com",
+    "project_id": "picsta-fa6e2",
+    "storage_bucket": "picsta-fa6e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746149705614:android:c8e30af14a0b9357",
+        "android_client_info": {
+          "package_name": "com.ijp.app.picsta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746149705614-oq8jistict3bmi3ma5g1ldq381h3u2ij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ijp.app.picsta",
+            "certificate_hash": "2a6c83afea7d6aa338baf9081c4a776e1c8d52ee"
+          }
+        },
+        {
+          "client_id": "746149705614-ts8ac366965sq800k3cvn91g7gfm1uq6.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "746149705614-ts8ac366965sq800k3cvn91g7gfm1uq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdU9ePALdnZ1HUCJRKPhemeroA088OAvU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746149705614-ts8ac366965sq800k3cvn91g7gfm1uq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
