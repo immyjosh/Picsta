@@ -9,7 +9,7 @@ public class WallpaperItem {
 
     public WallpaperItem(String imageUrl, String categoryId) {
         this.imageUrl = imageUrl;
-        categoryId = categoryId;
+        this.categoryId = categoryId;
     }
 
     public String getImagelink() {
@@ -25,6 +25,6 @@ public class WallpaperItem {
     }
 
     public void setCategoryId(String categoryId) {
-        categoryId = categoryId;
+        this.categoryId = categoryId;
     }
 }
