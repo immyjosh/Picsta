@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.widget.Switch;
 
 import com.ijp.app.picsta.Fragment.CategoryFragment;
-import com.ijp.app.picsta.Fragment.DailyPopularFragment;
+import com.ijp.app.picsta.Fragment.Trending;
 import com.ijp.app.picsta.Fragment.RecentsFragment;
 
 public class MyFragmentAdapter extends FragmentPagerAdapter {
@@ -25,7 +25,7 @@ public class MyFragmentAdapter extends FragmentPagerAdapter {
         if(position==0)
             return CategoryFragment.getInstance();
         else if (position==1)
-            return DailyPopularFragment.getInstance();
+            return Trending.getInstance();
         else if (position==2)
             return RecentsFragment.getInstance(context);
         else
@@ -46,7 +46,7 @@ public class MyFragmentAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Category";
             case 1:
-                return "Daily Popular";
+                return "Trending";
             case 2:
                 return "Recents";
 

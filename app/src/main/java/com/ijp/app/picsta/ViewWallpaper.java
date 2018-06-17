@@ -21,17 +21,34 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
+import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ijp.app.picsta.Common.Common;
 import com.ijp.app.picsta.Database.DataSource.RecentRepository;
 import com.ijp.app.picsta.Database.LocalDatabase.LocalDatabase;
 import com.ijp.app.picsta.Database.LocalDatabase.RecentsDataSource;
 import com.ijp.app.picsta.Database.Recents;
 import com.ijp.app.picsta.Helper.SaveImageHelper;
+import com.ijp.app.picsta.Model.WallpaperItem;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.UUID;
 
@@ -52,9 +69,16 @@ public class ViewWallpaper extends AppCompatActivity {
     CoordinatorLayout rootLayout;
     ImageView imageView;
 
+    FloatingActionMenu mainFloating;
+    com.github.clans.fab.FloatingActionButton fbShare;
+
     //Room Database
     CompositeDisposable compositeDisposable;
     RecentRepository recentRepository;
+
+    //facebook
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -107,6 +131,32 @@ public class ViewWallpaper extends AppCompatActivity {
         }
     };
 
+    private Target facebookConvertBitmap=new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            SharePhoto sharePhoto=new SharePhoto.Builder()
+                    .setBitmap(bitmap)
+                    .build();
+            if(shareDialog.canShow(SharePhotoContent.class))
+            {
+                SharePhotoContent content=new SharePhotoContent.Builder()
+                        .addPhoto(sharePhoto)
+                        .build();
+                shareDialog.show(content);
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +166,10 @@ public class ViewWallpaper extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if(getSupportActionBar()!=null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Init Facebook
+        callbackManager= CallbackManager.Factory.create();
+        shareDialog=new ShareDialog(this);
 
         //Init RoomDatabase
         compositeDisposable=new CompositeDisposable();
@@ -135,6 +189,36 @@ public class ViewWallpaper extends AppCompatActivity {
         Picasso.with(this)
                 .load(Common.selectBackground.getImagelink())
                 .into(imageView);
+
+        mainFloating=findViewById(R.id.menu);
+        fbShare=findViewById(R.id.fb_share);
+        fbShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create callback
+                shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+                    @Override
+                    public void onSuccess(Sharer.Result result) {
+                        Toast.makeText(ViewWallpaper.this, "Share Successful", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(ViewWallpaper.this, "Share Cancel", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Toast.makeText(ViewWallpaper.this, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                //Fetch photo from link and convert to bitmap
+                Picasso.with(getBaseContext())
+                        .load(Common.selectBackground.getImagelink())
+                        .into(facebookConvertBitmap);
+            }
+        });
 
         //add to recents
         addToRecents();
@@ -171,7 +255,70 @@ public class ViewWallpaper extends AppCompatActivity {
             }
         });
 
+        //View Count
+        increaseViewCount();
 
+    }
+
+    private void increaseViewCount() {
+        FirebaseDatabase.getInstance()
+                .getReference(Common.STR_WALLPAPER)
+                .child(Common.selectBackgroundKey)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild("viewCount"))
+                        {
+                            WallpaperItem wallpaperItem=dataSnapshot.getValue(WallpaperItem.class);
+                            long count=wallpaperItem.getViewCount()+1;
+                            //Update
+                            Map<String,Object> updateView=new HashMap<>();
+                            updateView.put("viewCount",count);
+
+                            FirebaseDatabase.getInstance()
+                                    .getReference(Common.STR_WALLPAPER)
+                                    .child(Common.selectBackgroundKey)
+                                    .updateChildren(updateView)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(ViewWallpaper.this, "Cannot Update View Count", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        else // If view Count is not set to default
+                        {
+                            Map<String,Object> updateView=new HashMap<>();
+                            updateView.put("viewCount",Long.valueOf(1));
+
+                            FirebaseDatabase.getInstance()
+                                    .getReference(Common.STR_WALLPAPER)
+                                    .child(Common.selectBackgroundKey)
+                                    .updateChildren(updateView)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(ViewWallpaper.this, "Cannot Set Default View Count", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void addToRecents() {
@@ -180,7 +327,7 @@ public class ViewWallpaper extends AppCompatActivity {
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
                 Recents recents=new Recents(Common.selectBackground.getImagelink(),
                         Common.selectBackground.getCategoryId(),
-                        String.valueOf(System.currentTimeMillis()));
+                        String.valueOf(System.currentTimeMillis()),Common.selectBackgroundKey);
                 recentRepository.insertRecents(recents);
                 e.onComplete();
             }

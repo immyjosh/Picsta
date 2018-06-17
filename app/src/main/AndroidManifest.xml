@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ijp.app.picsta">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,6 +16,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FullScreenTheme">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+                    tools:replace="android:value"
+                   android:value="@string/facebook_app_id"></meta-data>
+
+        <provider
+            android:authorities="com.facebook.app.FacebookContentProvider458797334544550"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

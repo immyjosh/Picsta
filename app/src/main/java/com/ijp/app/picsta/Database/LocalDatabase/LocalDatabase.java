@@ -11,7 +11,7 @@ import static com.ijp.app.picsta.Database.LocalDatabase.LocalDatabase.DATABASE_V
 
 @Database(entities = Recents.class,version = DATABASE_VERSION)
 public abstract class LocalDatabase extends RoomDatabase {
-    public static final int DATABASE_VERSION=1;
+    public static final int DATABASE_VERSION=2;
     public static final String DATABASE_NAME="Picsta";
 
     public abstract RecentsDAO recentsDAO();

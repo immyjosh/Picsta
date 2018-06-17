@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.DailyPopularFragment">
+    tools:context=".Fragment.CategoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"
-        android:text="Popular Fragment" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_trending"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
