@@ -86,7 +86,7 @@ public class ListWallpaper extends AppCompatActivity {
 
                                             @Override
                                             public void onError() {
-                                                Log.e("ERROR","COULD NOT FETCH IMAGE");
+                                                Log.e("ERROR LIST WALLPAPER","COULD NOT FETCH IMAGE");
                                             }
                                         });
                             }

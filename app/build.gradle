@@ -59,12 +59,16 @@ dependencies {
     //New Floating Action Button
     implementation 'com.github.clans:fab:1.6.4'
 
+    // Google Firebase
     implementation 'com.firebaseui:firebase-ui-database:3.3.1'
     implementation 'com.firebaseui:firebase-ui-auth:3.3.1'
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
+
+    //Material Spinner
+    implementation 'com.jaredrummler:material-spinner:1.2.4'
 
 
 }

@@ -4,10 +4,8 @@
     package="com.ijp.app.picsta">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,15 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FullScreenTheme">
-
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-                    tools:replace="android:value"
-                   android:value="@string/facebook_app_id"></meta-data>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value" />
 
         <provider
-            android:authorities="com.facebook.app.FacebookContentProvider458797334544550"
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider458797334544550"
+            android:exported="true" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -38,7 +36,8 @@
             android:label="@string/title_activity_home"
             android:theme="@style/FullScreenTheme" />
         <activity android:name=".ListWallpaper" />
-        <activity android:name=".ViewWallpaper"></activity>
+        <activity android:name=".ViewWallpaper" />
+        <activity android:name=".UploadWallpaper"></activity>
     </application>
 
 </manifest>
